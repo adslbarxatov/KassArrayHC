@@ -34,9 +34,15 @@ namespace RD_AAOW
 			if (!RDGenerics.AppHasAccessRights (true, false))
 				return;
 
-			if (!RDGenerics.StartedFromMSStore &&
-				!RDGenerics.CheckLibrariesExistence (ProgramDescription.AssemblyLibraries, true))
-				return;
+			if (!RDGenerics.StartedFromMSStore)
+				{
+				if (!RDGenerics.CheckLibrariesExistence (ProgramDescription.AssemblyLibraries, true))
+					return;
+
+				if (!LibraryProtocolChecker.CheckProtocolVersion (ProgramDescription.AssemblyDLLProtocol,
+					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDBDLL))
+					return;
+				}
 
 			// Отображение справки и запроса на принятие Политики
 			if (!RDInterface.AcceptEULA ())

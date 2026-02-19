@@ -6,6 +6,7 @@
 	<ScrollView>
 		<StackLayout>
 
+			<Label x:Name="RestartTipLabel" />
 			<Label />
 
 			<StackLayout Orientation="Horizontal">
@@ -18,19 +19,15 @@
 			<Label x:Name="FontSizeTipLabel" />
 
 			<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
-					WidthRequest="100" Color="#505050" Margin="6" />
+				WidthRequest="100" Color="#505050" Margin="30" />
 
-			<Label />
 			<StackLayout Orientation="Horizontal" HorizontalOptions="Start">
 				<Switch x:Name="ExtendedMode" VerticalOptions="Center" />
 				<Label x:Name="ExtendedModeLabel" VerticalOptions="Center" />
 			</StackLayout>
 			<Label x:Name="ExtendedModeTipLabel" />
 
-			<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
-					WidthRequest="200" Color="#505050" Margin="6" />
-
-			<Label x:Name="RestartTipLabel" />
+			<Label />
 
 		</StackLayout>
 	</ScrollView>
