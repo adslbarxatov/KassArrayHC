@@ -58,17 +58,32 @@ namespace RD_AAOW
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 			hideWindow = HideWindow;
 
+			// PR
+			bool ewhPRFailed = false;
 			try
 				{
-				ewhPR = new EventWaitHandle (false, EventResetMode.AutoReset,
-					KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+				ewhPR = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
 					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias);
 				}
 			catch
 				{
-				ewhPRIsActive = false;
+				ewhPRFailed = true;
 				}
-			try
+			if (ewhPRFailed)
+				{
+				try
+					{
+					ewhPR = new EventWaitHandle (false, EventResetMode.AutoReset,
+						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias);
+					}
+				catch
+					{
+					ewhPRIsActive = false;
+					}
+				}
+
+			/*try
 				{
 				ewhFS = new EventWaitHandle (false, EventResetMode.AutoReset,
 					KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
@@ -76,9 +91,35 @@ namespace RD_AAOW
 				}
 			catch
 				{
-				ewhFSIsActive = false;
-				}
+					ewhFSIsActive = false;
+				}*/
+
+			// FS
+			bool ewhFSFailed = false;
 			try
+				{
+				ewhFS = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias);
+				}
+			catch
+				{
+				ewhFSFailed = true;
+				}
+			if (ewhFSFailed)
+				{
+				try
+					{
+					ewhFS = new EventWaitHandle (false, EventResetMode.AutoReset,
+						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias);
+					}
+				catch
+					{
+					ewhFSIsActive = false;
+					}
+				}
+
+			/*try
 				{
 				ewhEC = new EventWaitHandle (false, EventResetMode.AutoReset,
 					KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
@@ -87,15 +128,32 @@ namespace RD_AAOW
 			catch
 				{
 				ewhECIsActive = false;
-				}
-
-			/*if (!RDGenerics.CheckLibrariesVersions (ProgramDescription.AssemblyLibraries, true))
-			if (!LibraryProtocolChecker.CheckProtocolVersion (ProgramDescription.AssemblyDLLProtocol,
-				KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDBDLL))
-				{
-				closeWindowOnError = true;
-				return;
 				}*/
+
+			// EC
+			bool ewhECFailed = false;
+			try
+				{
+				ewhEC = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias);
+				}
+			catch
+				{
+				ewhECFailed = true;
+				}
+			if (ewhECFailed)
+				{
+				try
+					{
+					ewhEC = new EventWaitHandle (false, EventResetMode.AutoReset,
+						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
+						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias);
+					}
+				catch
+					{
+					ewhECIsActive = false;
+					}
+				}
 
 			// Сборка структуры страниц
 			int pIdx = 0;
@@ -185,7 +243,6 @@ namespace RD_AAOW
 				}
 
 			// Настройка контролов
-			/*OverrideCloseButton.Checked = KassArrayDB::RD_AAOW.KKTSupport.OverrideCloseButton;*/
 			OverrideCloseButton.Checked = AppSettings.OverrideCloseButton;
 
 			KKTListForCodes.Items.AddRange (kb.CodeTables.GetKKTTypeNames ().ToArray ());
@@ -414,7 +471,6 @@ namespace RD_AAOW
 			if (closeWindowOnError)
 				return;
 
-			/*if (KassArrayDB::RD_AAOW.KKTSupport.OverrideCloseButton && !closeWindowOnRequest)*/
 			if (AppSettings.OverrideCloseButton && !closeWindowOnRequest)
 				{
 				e.Cancel = true;
@@ -695,7 +751,6 @@ namespace RD_AAOW
 		// Включение / выключение отдельной кнопки сворачивания
 		private void OverrideCloseButton_CheckedChanged (object sender, EventArgs e)
 			{
-			/*KassArrayDB::RD_AAOW.KKTSupport.OverrideCloseButton = OverrideCloseButton.Checked;*/
 			AppSettings.OverrideCloseButton = OverrideCloseButton.Checked;
 			}
 

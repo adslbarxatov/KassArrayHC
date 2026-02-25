@@ -26,7 +26,7 @@ namespace RD_AAOW
 				return;
 
 			// Проверка запуска единственной копии
-			if (!RDGenerics.IsAppInstanceUnique (true))
+			if (!RDGenerics.IsAppInstanceUnique (true, "_L"))
 				return;
 
 
