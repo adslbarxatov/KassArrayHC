@@ -83,17 +83,6 @@ namespace RD_AAOW
 					}
 				}
 
-			/*try
-				{
-				ewhFS = new EventWaitHandle (false, EventResetMode.AutoReset,
-					KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias);
-				}
-			catch
-				{
-					ewhFSIsActive = false;
-				}*/
-
 			// FS
 			bool ewhFSFailed = false;
 			try
@@ -118,17 +107,6 @@ namespace RD_AAOW
 					ewhFSIsActive = false;
 					}
 				}
-
-			/*try
-				{
-				ewhEC = new EventWaitHandle (false, EventResetMode.AutoReset,
-					KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias);
-				}
-			catch
-				{
-				ewhECIsActive = false;
-				}*/
 
 			// EC
 			bool ewhECFailed = false;
