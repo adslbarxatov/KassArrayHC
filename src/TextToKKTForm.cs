@@ -52,8 +52,6 @@ namespace RD_AAOW
 			{
 			// Инициализация
 			InitializeComponent ();
-			/*if (RDLocale.CurrentLanguage != RDLanguages.ru_ru)
-				RDLocale.CurrentLanguage = RDLanguages.ru_ru;*/
 
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 			hideWindow = HideWindow;
@@ -260,6 +258,8 @@ namespace RD_AAOW
 			ErrorFindButton_Click (ErrorFindNextButton, null);
 
 			FNLifeEvFlags = (KassArrayDB::RD_AAOW.FNLifeFlags)AppSettings.FNLifeEvFlags;
+			FNLifeStartDate.MinDate = LibrarySupport.MinimumDatePickerValue;
+			FNLifeStartDate.MaxDate = RDGenerics.MaximumDatePickerValue;
 			FNLifeStartDate.Value = DateTime.Now;
 			FNLife_Search (ErrorFindNextButton, null);
 

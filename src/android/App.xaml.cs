@@ -149,9 +149,6 @@ namespace RD_AAOW
 
 			kb = new KnowledgeBase ();
 
-			/*if (!RDLocale.IsCurrentLanguageRuRu)
-				RDLocale.CurrentLanguage = RDLanguages.ru_ru;*/
-
 			#region Общая конструкция страниц приложения
 
 			uiPages.Add (ApplyPageSettings (new HeadersPage (),
