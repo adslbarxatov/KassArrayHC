@@ -12,6 +12,9 @@
 			{
 			get
 				{
+				if (ofd == null)
+					ofd = new OFD ();
+
 				return ofd;
 				}
 			}
@@ -24,6 +27,9 @@
 			{
 			get
 				{
+				if (kkts == null)
+					kkts = new KKTSerial ();
+
 				return kkts;
 				}
 			}
@@ -36,6 +42,9 @@
 			{
 			get
 				{
+				if (fns == null)
+					fns = new FNSerial ();
+
 				return fns;
 				}
 			}
@@ -50,6 +59,9 @@
 			{
 			get
 				{
+				if (kktc == null)
+					kktc = new KKTCodes ();
+
 				return kktc;
 				}
 			}
@@ -62,6 +74,9 @@
 			{
 			get
 				{
+				if (kkte == null)
+					kkte = new KKTErrorsList ();
+
 				return kkte;
 				}
 			}
@@ -74,6 +89,9 @@
 			{
 			get
 				{
+				if (td == null)
+					td = new TermsDictionary ();
+
 				return td;
 				}
 			}
@@ -86,6 +104,9 @@
 			{
 			get
 				{
+				if (ug == null)
+					ug = new UserGuides ();
+
 				return ug;
 				}
 			}
@@ -98,6 +119,9 @@
 			{
 			get
 				{
+				if (tlvt == null)
+					tlvt = new TLVTags ();
+
 				return tlvt;
 				}
 			}
@@ -110,6 +134,9 @@
 			{
 			get
 				{
+				if (barc == null)
+					barc = new BarCodes ();
+
 				return barc;
 				}
 			}
@@ -122,6 +149,9 @@
 			{
 			get
 				{
+				if (conn == null)
+					conn = new Connectors ();
+
 				return conn;
 				}
 			}
@@ -134,6 +164,9 @@
 			{
 			get
 				{
+				if (ud == null)
+					ud = new UnicodeDescriptor ();
+
 				return ud;
 				}
 			}
@@ -146,6 +179,9 @@
 			{
 			get
 				{
+				if (ll == null)
+					ll = new LowLevel ();
+
 				return ll;
 				}
 			}
@@ -154,15 +190,15 @@
 #endif
 
 		/// <summary>
-		/// Конструктор. Инициализирует базу знаний
+		/// Конструктор-заглушка
 		/// </summary>
 		public KnowledgeBase ()
 			{
-			ofd = new OFD ();
+			/*ofd = new OFD ();
 			kkts = new KKTSerial ();
 			fns = new FNSerial ();
 
-#if !KASSARRAYPR && !KASSARRAYEC
+if !KASSARRAYPR && !KASSARRAYEC
 
 			kktc = new KKTCodes ();
 			kkte = new KKTErrorsList ();
@@ -174,7 +210,7 @@
 			ud = new UnicodeDescriptor ();
 			ll = new LowLevel ();
 
-#endif
+endif*/
 			}
 		}
 	}
