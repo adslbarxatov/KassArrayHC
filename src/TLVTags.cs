@@ -75,11 +75,6 @@ namespace RD_AAOW
 		/// </summary>
 		OperatorConfirmation = 8,
 
-		/*/// <summary>
-		/// Все типы документов
-		/// </summary>
-		AllTypes = 9,*/
-
 		/// <summary>
 		/// Запрос о коде маркировки
 		/// </summary>
@@ -145,7 +140,6 @@ namespace RD_AAOW
 		private List<TLVTags_ObligationStates> oblPrintObligations = [];
 		private List<TLVTags_ObligationStates> oblDigitalObligations = [];
 		private List<string> oblConditions = [];
-		/*private List<string> oblDigitalConditions = [];*/
 		private List<string> oblTables = [];
 		private List<string> oblParents = [];
 
@@ -288,11 +282,11 @@ namespace RD_AAOW
 
 #if ANDROID
 			lastObligation = "<b>Для ФФД 1.05:</b><br/><i>" +
-				BuildObligation (i, TLVTags_FFDVersions.FFD_105).Replace (RDLocale.RN, "<br/>") +
+				BuildObligation (i, TLVTags_FFDVersions.FFD_105, true).Replace (RDLocale.RN, "<br/>") +
 				"</i><br/><br/><b>Для ФФД 1.1:</b><br/><i>" +
-				BuildObligation (i, TLVTags_FFDVersions.FFD_110).Replace (RDLocale.RN, "<br/>") +
+				BuildObligation (i, TLVTags_FFDVersions.FFD_110, false).Replace (RDLocale.RN, "<br/>") +
 				"</i><br/><br/><b>Для ФФД 1.2:</b><br/><i>" +
-				BuildObligation (i, TLVTags_FFDVersions.FFD_120).Replace (RDLocale.RN, "<br/>") + "</i>";
+				BuildObligation (i, TLVTags_FFDVersions.FFD_120, false).Replace (RDLocale.RN, "<br/>") + "</i>";
 #else
 			if (string.IsNullOrWhiteSpace (tlvSeparator))
 				tlvSeparator = RDLocale.RNRN + "–".PadLeft (54, '–') + RDLocale.RNRN;
@@ -306,7 +300,7 @@ namespace RD_AAOW
 				v <= TLVTags_FFDVersions.FFD_120; v++)
 				{
 				lastObligation += GetFFDName (v) + ":" + RDLocale.RNRN;
-				lastObligation += BuildObligation (i, v);
+				lastObligation += BuildObligation (i, v, v == TLVTags_FFDVersions.FFD_105);
 				if (v < TLVTags_FFDVersions.FFD_120)
 					lastObligation += tlvSeparator;
 				}
@@ -437,11 +431,12 @@ namespace RD_AAOW
 			}
 
 		// Метод собирает требование обязательности
-		private string BuildObligation (int Index, TLVTags_FFDVersions FFD)
+		private string BuildObligation (int Index, TLVTags_FFDVersions FFD, bool ClearParents)
 			{
 			// Подготовка
 			string res = "";
-			lastParents.Clear ();
+			if (ClearParents)
+				lastParents.Clear ();
 
 			// Прогон по списку обязательности
 			for (int i = 0; i < oblIndices[Index].Count; i++)
@@ -454,10 +449,6 @@ namespace RD_AAOW
 				// Типы документов
 				switch (oblDocTypes[oblIndices[Index][i]])
 					{
-					/*case TLVTags_DocumentTypes.AllTypes:
-						res += "всех типов документов";
-						break;*/
-
 					case TLVTags_DocumentTypes.Bill:
 						res += "чеков и БСО";
 						break;

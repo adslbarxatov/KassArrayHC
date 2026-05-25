@@ -194,23 +194,6 @@
 		/// </summary>
 		public KnowledgeBase ()
 			{
-			/*ofd = new OFD ();
-			kkts = new KKTSerial ();
-			fns = new FNSerial ();
-
-if !KASSARRAYPR && !KASSARRAYEC
-
-			kktc = new KKTCodes ();
-			kkte = new KKTErrorsList ();
-			td = new TermsDictionary ();
-			ug = new UserGuides ();
-			tlvt = new TLVTags ();
-			barc = new BarCodes ();
-			conn = new Connectors ();
-			ud = new UnicodeDescriptor ();
-			ll = new LowLevel ();
-
-endif*/
 			}
 		}
 	}
