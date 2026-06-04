@@ -38,10 +38,19 @@ namespace RD_AAOW
 		private bool closeWindowOnError = false;
 		private bool closeWindowOnRequest = false;
 
-		private EventWaitHandle ewhPR, ewhFS, ewhEC;
+		/*private EventWaitHandle ewhPR, ewhFS, ewhEC;
 		private bool ewhPRIsActive = true;
 		private bool ewhFSIsActive = true;
-		private bool ewhECIsActive = true;
+		private bool ewhECIsActive = true;*/
+
+		// Дескрипторы вызова остальных инструментов
+		private const byte ewhFS = 0;
+		private const byte ewhPR = 1;
+		private const byte ewhEC = 2;
+		private const byte ewhDA = 3;
+		private EventWaitHandle[] ewh = new EventWaitHandle[4];
+		private bool[] ewhIsActive = [true, true, true, true];
+		private string[] ewhAliases = new string[4];
 
 		#region Главный интерфейс
 
@@ -56,7 +65,62 @@ namespace RD_AAOW
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 			hideWindow = HideWindow;
 
-			// PR
+			// Инициализация дескрипторов для вызова инструментов
+			bool ewhFailed;
+			ewhAliases[ewhFS] = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias;
+			ewhAliases[ewhPR] = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias;
+			ewhAliases[ewhEC] = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias;
+			ewhAliases[ewhDA] = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDAAlias;
+
+			for (int i = 0; i < ewh.Length; i++)
+				{
+				ewhFailed = false;
+				/*string alias;
+				switch (i)
+					{
+					case 0:
+					default:
+						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias;
+						break;
+
+					case 1:
+						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias;
+						break;
+
+					case 2:
+						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias;
+						break;
+
+					case 3:
+						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDAAlias;
+						break;
+					}*/
+
+				try
+					{
+					ewh[i] = EventWaitHandle.OpenExisting
+						(KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName + ewhAliases[i]);
+					}
+				catch
+					{
+					ewhFailed = true;
+					}
+
+				if (ewhFailed)
+					{
+					try
+						{
+						ewh[i] = new EventWaitHandle (false, EventResetMode.AutoReset,
+							KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName + ewhAliases[i]);
+						}
+					catch
+						{
+						ewhIsActive[i] = false;
+						}
+					}
+				}
+
+			/*// PR
 			bool ewhPRFailed = false;
 			try
 				{
@@ -129,7 +193,7 @@ namespace RD_AAOW
 					{
 					ewhECIsActive = false;
 					}
-				}
+				}*/
 
 			// Сборка структуры страниц
 			int pIdx = 0;
@@ -360,8 +424,15 @@ namespace RD_AAOW
 			ni.ContextMenuStrip.Items.Add ("Работа с ФН", null, CallFSReader);
 			ni.ContextMenuStrip.Items.Add ("Заявления для ФНС", null, CallTemplateBuilder);
 			ni.ContextMenuStrip.Items.Add ("Сроки действия ФН", null, CallExpirationController);
-			ni.ContextMenuStrip.Items[0].Enabled = ni.ContextMenuStrip.Items[1].Enabled = ni.ContextMenuStrip.Items[2].Enabled =
-				!RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
+			ni.ContextMenuStrip.Items.Add ("Обработка данных ОФД", null, CallDataAnalyzer);
+
+			bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
+			for (int i = 0; i < ewh.Length; i++)
+				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;
+			ni.ContextMenuStrip.Items[ewhDA].Enabled = false;	// Пока недоступен
+
+			/*ni.ContextMenuStrip.Items[0].Enabled = ni.ContextMenuStrip.Items[1].Enabled = ni.ContextMenuStrip.Items[2].Enabled =
+				!RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;*/
 			ni.ContextMenuStrip.Items.Add (RDLocale.GetDefaultText (RDLDefaultTexts.Button_Exit), null,
 				CloseService);
 
@@ -520,17 +591,22 @@ namespace RD_AAOW
 
 		private void CallFSReader (object sender, EventArgs e)
 			{
-			CallSideTool (0);
+			CallSideTool (ewhFS);
 			}
 
 		private void CallTemplateBuilder (object sender, EventArgs e)
 			{
-			CallSideTool (1);
+			CallSideTool (ewhPR);
 			}
 
 		private void CallExpirationController (object sender, EventArgs e)
 			{
-			CallSideTool (2);
+			CallSideTool (ewhEC);
+			}
+
+		private void CallDataAnalyzer (object sender, EventArgs e)
+			{
+			CallSideTool (ewhDA);
 			}
 
 		private void CallSideTool (byte Index)
@@ -539,7 +615,7 @@ namespace RD_AAOW
 			bool problem;
 			string proc = KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName;
 
-			switch (Index)
+			/*switch (Index)
 				{
 				case 0:
 				default:
@@ -556,11 +632,13 @@ namespace RD_AAOW
 					problem = ewhECIsActive ? ewhEC.WaitOne (100) : true;
 					proc += KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias;
 					break;
-				}
+				}*/
+			problem = ewhIsActive[Index] ? ewh[Index].WaitOne (100) : true;
+			proc += ewhAliases[Index];
 
 			if (!problem)
 				{
-				switch (Index)
+				/*switch (Index)
 					{
 					case 0:
 					default:
@@ -574,7 +652,8 @@ namespace RD_AAOW
 					case 2:
 						ewhEC.Set ();
 						break;
-					}
+					}*/
+				ewh[Index].Set ();
 				}
 
 			// Контроль на завершение предыдущих процессов
@@ -593,11 +672,11 @@ namespace RD_AAOW
 				}
 
 			// Отмена дальнейших действий, если процесс не был завершён / уже был запущен
+			BExit_Click (null, null);
 			if (!res)
 				return;
 
 			// Нормальный запуск модуля работы с ФН
-			BExit_Click (null, null);
 			string exe = RDGenerics.AppStartupPath + proc + ".exe";
 			if (!RDGenerics.CheckLibrariesExistence (exe, true))
 				return;
