@@ -38,11 +38,6 @@ namespace RD_AAOW
 		private bool closeWindowOnError = false;
 		private bool closeWindowOnRequest = false;
 
-		/*private EventWaitHandle ewhPR, ewhFS, ewhEC;
-		private bool ewhPRIsActive = true;
-		private bool ewhFSIsActive = true;
-		private bool ewhECIsActive = true;*/
-
 		// Дескрипторы вызова остальных инструментов
 		private const byte ewhFS = 0;
 		private const byte ewhPR = 1;
@@ -75,27 +70,6 @@ namespace RD_AAOW
 			for (int i = 0; i < ewh.Length; i++)
 				{
 				ewhFailed = false;
-				/*string alias;
-				switch (i)
-					{
-					case 0:
-					default:
-						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias;
-						break;
-
-					case 1:
-						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias;
-						break;
-
-					case 2:
-						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias;
-						break;
-
-					case 3:
-						alias = KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDAAlias;
-						break;
-					}*/
-
 				try
 					{
 					ewh[i] = EventWaitHandle.OpenExisting
@@ -119,81 +93,6 @@ namespace RD_AAOW
 						}
 					}
 				}
-
-			/*// PR
-			bool ewhPRFailed = false;
-			try
-				{
-				ewhPR = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias);
-				}
-			catch
-				{
-				ewhPRFailed = true;
-				}
-			if (ewhPRFailed)
-				{
-				try
-					{
-					ewhPR = new EventWaitHandle (false, EventResetMode.AutoReset,
-						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias);
-					}
-				catch
-					{
-					ewhPRIsActive = false;
-					}
-				}
-
-			// FS
-			bool ewhFSFailed = false;
-			try
-				{
-				ewhFS = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias);
-				}
-			catch
-				{
-				ewhFSFailed = true;
-				}
-			if (ewhFSFailed)
-				{
-				try
-					{
-					ewhFS = new EventWaitHandle (false, EventResetMode.AutoReset,
-						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias);
-					}
-				catch
-					{
-					ewhFSIsActive = false;
-					}
-				}
-
-			// EC
-			bool ewhECFailed = false;
-			try
-				{
-				ewhEC = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-					KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias);
-				}
-			catch
-				{
-				ewhECFailed = true;
-				}
-			if (ewhECFailed)
-				{
-				try
-					{
-					ewhEC = new EventWaitHandle (false, EventResetMode.AutoReset,
-						KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
-						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias);
-					}
-				catch
-					{
-					ewhECIsActive = false;
-					}
-				}*/
 
 			// Сборка структуры страниц
 			int pIdx = 0;
@@ -429,10 +328,8 @@ namespace RD_AAOW
 			bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
 			for (int i = 0; i < ewh.Length; i++)
 				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;
-			ni.ContextMenuStrip.Items[ewhDA].Enabled = false;	// Пока недоступен
+			/*ni.ContextMenuStrip.Items[ewhDA].Enabled = false;	// Пока недоступен*/
 
-			/*ni.ContextMenuStrip.Items[0].Enabled = ni.ContextMenuStrip.Items[1].Enabled = ni.ContextMenuStrip.Items[2].Enabled =
-				!RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;*/
 			ni.ContextMenuStrip.Items.Add (RDLocale.GetDefaultText (RDLDefaultTexts.Button_Exit), null,
 				CloseService);
 

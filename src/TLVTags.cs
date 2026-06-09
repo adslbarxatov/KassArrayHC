@@ -197,11 +197,8 @@ namespace RD_AAOW
 						oblDocTypes.Add ((TLVTags_DocumentTypes)(type % 100));
 
 						oblPrintObligations.Add ((TLVTags_ObligationStates)uint.Parse (oblValues2[2]));
-						/*oblPrintConditions.Add ((oblValues[3] == "-") ? "" : oblValues[3]);*/
 						oblDigitalObligations.Add ((TLVTags_ObligationStates)uint.Parse (oblValues2[3]));
-						/*oblVirtualConditions.Add ((oblValues[5] == "-") ? "" : oblValues[5]);*/
 						oblConditions.Add ((oblValues2[4] == "-") ? "" : oblValues2[4]);
-						/*oblDigitalConditions.Add ((oblValues[5] == "-") ? "" : oblValues[5]);*/
 						oblTables.Add (oblValues2[5]);
 						oblParents.Add ((oblValues2[6] == "-") ? "" : oblValues2[6]);
 
@@ -522,8 +519,6 @@ namespace RD_AAOW
 							res += "не";
 						res += "обязателен";
 
-						/*string condition = ((j == 0) ? oblPrintConditions[oblIndices[Index][i]] :
-							oblVirtualConditions[oblIndices[Index][i]]);*/
 						string condition = oblConditions[oblIndices[Index][i]];
 						bool cond = !string.IsNullOrWhiteSpace (condition);
 						bool parent = !string.IsNullOrWhiteSpace (oblParents[oblIndices[Index][i]]);
