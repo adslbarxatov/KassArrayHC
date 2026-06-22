@@ -328,7 +328,6 @@ namespace RD_AAOW
 			bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
 			for (int i = 0; i < ewh.Length; i++)
 				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;
-			/*ni.ContextMenuStrip.Items[ewhDA].Enabled = false;	// Пока недоступен*/
 
 			ni.ContextMenuStrip.Items.Add (RDLocale.GetDefaultText (RDLDefaultTexts.Button_Exit), null,
 				CloseService);
@@ -512,46 +511,11 @@ namespace RD_AAOW
 			bool problem;
 			string proc = KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName;
 
-			/*switch (Index)
-				{
-				case 0:
-				default:
-					problem = ewhFSIsActive ? ewhFS.WaitOne (100) : true;
-					proc += KassArrayDB::RD_AAOW.ProgramDescription.KassArrayFSAlias;
-					break;
-
-				case 1:
-					problem = ewhPRIsActive ? ewhPR.WaitOne (100) : true;
-					proc += KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias;
-					break;
-
-				case 2:
-					problem = ewhECIsActive ? ewhEC.WaitOne (100) : true;
-					proc += KassArrayDB::RD_AAOW.ProgramDescription.KassArrayECAlias;
-					break;
-				}*/
 			problem = ewhIsActive[Index] ? ewh[Index].WaitOne (100) : true;
 			proc += ewhAliases[Index];
 
 			if (!problem)
-				{
-				/*switch (Index)
-					{
-					case 0:
-					default:
-						ewhFS.Set ();
-						break;
-
-					case 1:
-						ewhPR.Set ();
-						break;
-
-					case 2:
-						ewhEC.Set ();
-						break;
-					}*/
 				ewh[Index].Set ();
-				}
 
 			// Контроль на завершение предыдущих процессов
 			bool res;

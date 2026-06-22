@@ -259,6 +259,9 @@ namespace RD_AAOW
 			'f',
 			'g',
 			'h',
+			'i',
+			'j',
+			'k',
 			];
 		private byte[][] tsMapIndexes = [
 			[1, 4, 5, 18],
@@ -273,6 +276,9 @@ namespace RD_AAOW
 			[13],
 			[16],
 			[19],
+			[20],
+			[21],
+			[22],
 			];
 
 		/// <summary>
