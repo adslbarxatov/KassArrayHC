@@ -245,8 +245,7 @@ namespace RD_AAOW
 
 		private int lastSearchOffset = 0;
 
-		// Карта индексов ТС ПИоТ
-		private char[] tsMapNames = [
+		/*private char[] tsMapNames = [
 			'a',
 			'2',
 			'3',
@@ -262,11 +261,12 @@ namespace RD_AAOW
 			'i',
 			'j',
 			'k',
+			'm',
 			];
 		private byte[][] tsMapIndexes = [
 			[1, 4, 5, 18],
 			[2],
-			[3, 17],
+			[3, 17, 23, 24],
 			[6],
 			[7],
 			[8, 9],
@@ -279,7 +279,8 @@ namespace RD_AAOW
 			[20],
 			[21],
 			[22],
-			];
+			[25],
+			];*/
 
 		/// <summary>
 		/// Конструктор. Инициализирует таблицу
@@ -292,8 +293,37 @@ namespace RD_AAOW
 #else
 			byte[] tspiData = RD_AAOW.Properties.Resources.TSPI;
 #endif
-			string tspi = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (tspiData);
-			string[] tspiValues = tspi.Split (['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+			/*string tspi = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (tspiData);
+			string[] tspiValues = tspi.Split (['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);*/
+			string buf = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (tspiData);
+			StringReader SR = new StringReader (buf);
+
+			// Карта индексов ТС ПИоТ
+			List<char> tsMapNames2 = [];
+			List<byte[]> tsMapIndexes2 = [];
+			List<string[]> tspiValues2 = [];
+
+			string str;
+			char[] splitter = ['\t'];
+
+			while (!string.IsNullOrWhiteSpace (str = SR.ReadLine ()))
+				tspiValues2.Add (str.Split (splitter, StringSplitOptions.RemoveEmptyEntries));
+
+			char[] numbersSplitter = [' '];
+			while (!string.IsNullOrWhiteSpace (str = SR.ReadLine ()))
+				{
+				string[] map = str.Split (splitter, StringSplitOptions.RemoveEmptyEntries);
+				tsMapNames2.Add (map[0][0]);
+
+				List<byte> numbersB = [];
+				string[] numbersS = map[1].Split (numbersSplitter, StringSplitOptions.RemoveEmptyEntries);
+				for (int n = 0; n < numbersS.Length; n++)
+					numbersB.Add (byte.Parse (numbersS[n]));
+
+				tsMapIndexes2.Add (numbersB.ToArray ());
+				}
+
+			SR.Close ();
 
 			// Получение файла заводских номеров и моделей
 #if !ANDROID
@@ -301,12 +331,15 @@ namespace RD_AAOW
 #else
 			byte[] data = RD_AAOW.Properties.Resources.KKTSN;
 #endif
-			string buf = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (data);
-			StringReader SR = new StringReader (buf);
+			/*string buf = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (data);
+			StringReader SR = new StringReader (buf);*/
 
-			// Формирование массива 
+			buf = RDGenerics.GetEncoding (RDEncodings.UTF8).GetString (data);
+			SR = new StringReader (buf);
+
+			/*// Формирование массива 
 			string str;
-			char[] splitter = ['\t'];
+			char[] splitter = ['\t'];*/
 
 			// Чтение параметров
 			SR.ReadLine (); // Заголовок
@@ -480,13 +513,13 @@ namespace RD_AAOW
 						break;
 
 					default:
-						int tsMapIdx = tsMapNames.IndexOf (values[2][5]);
-						byte[] tsIndexes = tsMapIndexes[tsMapIdx];
+						int tsMapIdx = tsMapNames2.IndexOf (values[2][5]);
+						byte[] tsIndexes = tsMapIndexes2[tsMapIdx];
 
 						string tsLine = "";
 						for (int t = 0; t < tsIndexes.Length; t++)
 							{
-							string tsName = tspiValues[tsIndexes[t] - 1];
+							string tsName = tspiValues2[tsIndexes[t] - 1][1];
 							int left = tsName.IndexOf ('\t');
 
 							if (tsIndexes.Length > 1)

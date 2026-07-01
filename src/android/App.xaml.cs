@@ -69,7 +69,7 @@ namespace RD_AAOW
 			cableDescriptionText,
 			fnLifeLabel, fnLifeModelLabel, fnLifeGenericTaxLabel, fnLifeGoodsLabel,
 			rnmKKTTypeLabel, rnmINNCheckLabel, rnmRNMCheckLabel, lowLevelCommandDescr,
-			dictionaryDescriptionField, dictionaryLabelField,
+			dictionaryDescriptionField, /*dictionaryLabelField,*/
 			tlvDescriptionLabel, tlvTypeLabel, tlvValuesLabel, tlvObligationLabel,
 			barcodeDescriptionLabel, ofdDisabledLabel, convNumberResultField, convCodeResultField,
 			fontSizeField, ofdDNSNameLabel, ofdDNSNameMLabel, tlvValuesHeader;
@@ -82,7 +82,7 @@ namespace RD_AAOW
 			errorsKKTButton, userManualsKKTButton, userManualsPrintButton,
 			ofdNameButton, ofdDNSNameButton, ofdIPButton, ofdPortButton, ofdEmailButton, ofdSiteButton,
 			ofdDNSNameMButton, ofdIPMButton, ofdPortMButton, ofdINN,
-			rnmGenerate, convCodeSymbolField,
+			rnmGenerate, convCodeSymbolField, dictionaryLabelButton,
 			lowLevelProtocol, lowLevelCommand, lowLevelCommandCode,
 			encodingButton, fnLifeStatus, sampleNextButton;
 		private List<Button> uiButtons = [];
@@ -783,20 +783,23 @@ namespace RD_AAOW
 			RDInterface.ApplyButtonSettings (uiPages[tdcPage], "DictionaryFindBufferButton",
 				BufferButton, uiColors[tdcPage][cField], DictionaryFind_Clicked);
 
-			RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescrLabel",
-				"Описание:", RDLabelTypes.HeaderLeft);
+			/*RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescrLabel",
+				"Описание:", RDLabelTypes.HeaderLeft);*/
 
 			dictionaryDescriptionField = RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescr",
-				"", RDLabelTypes.Field, uiColors[tdcPage][cField]);
+				"", RDLabelTypes.Field, uiColors[tdcPage][cBack]);
 			dictionaryDescriptionField.FontFamily = RDGenerics.SerifFont;
 			dictionaryDescriptionField.HorizontalTextAlignment = TextAlignment.Justify;
 
-			dictionaryLabelField = RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescrLabel",
-				"", RDLabelTypes.HeaderCenter);
-			dictionaryLabelField.FontFamily = RDGenerics.SerifFont;
+			dictionaryLabelButton = RDInterface.ApplyButtonSettings (uiPages[tdcPage], "DictionaryDescrLabel",
+				"", uiColors[tdcPage][cBack], DictionaryCopy_Clicked);
+			dictionaryLabelButton.FontFamily = RDGenerics.SerifFont;
+			dictionaryLabelButton.FontSize += (dictionaryLabelButton.FontSize / 4.0);
+			dictionaryLabelButton.FontAttributes = FontAttributes.Bold;
 
 			RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescrTipLabel",
-				"Термины в квадратных скобках также доступны в словаре", RDLabelTypes.TipCenter);
+				"Термины в квадратных скобках также доступны в словаре" + RDLocale.RN +
+				"Нажатие на термин копирует весь текст в буфер обмена", RDLabelTypes.TipCenter);
 			goToButtons = (FlexLayout)uiPages[tdcPage].FindByName ("GoToButtons");
 			DictionaryFind_Clicked (sampleNextButton, null);
 
@@ -1282,14 +1285,14 @@ namespace RD_AAOW
 			int idx = res.IndexOf ('\x1');
 			if (idx < 0)
 				{
-				dictionaryLabelField.Text = res;
+				dictionaryLabelButton.Text = res;
 				dictionaryDescriptionField.Text = "";
 				return;
 				}
 
 			// Загрузка текста
 			string[] values = res.Split (['\x1']);
-			dictionaryLabelField.Text = values[0];
+			dictionaryLabelButton.Text = values[0];
 			dictionaryDescriptionField.Text = values[1];
 
 			// Поиск ссылок
@@ -1318,10 +1321,21 @@ namespace RD_AAOW
 				}
 			}
 
+		// Переход к вложенному термину
 		private void GoToButton_Clicked (object sender, EventArgs e)
 			{
 			AppSettings.DictionarySearch = ((Button)sender).Text;
 			DictionaryFind_Clicked (sampleNextButton, null);
+			}
+
+		// Копирование термина
+		private void DictionaryCopy_Clicked (object sender, EventArgs e)
+			{
+			string left = dictionaryLabelButton.Text.Replace (RDLocale.RN, ", ") + " ";
+			string right = dictionaryDescriptionField.Text.Replace ('[', '(').Replace (']', ')');
+
+			RDGenerics.SendToClipboard (left + right, false);
+			RDInterface.ShowBalloon ("Термин и его определение скопированы в буфер обмена", true);
 			}
 
 		#endregion

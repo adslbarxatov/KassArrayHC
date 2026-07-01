@@ -1203,6 +1203,17 @@ namespace RD_AAOW
 				}
 			}
 
+		// Копирование термина
+		private void TermCopy_Click (object sender, EventArgs e)
+			{
+			string left = LLLabel.Text.Replace (RDLocale.RN, ", ") + " ";
+			string right = LLDescription.Text.Replace ('[', '(').Replace (']', ')');
+
+			RDGenerics.SendToClipboard (left + right, false);
+			RDInterface.MessageBox (RDMessageFlags.CenterText | RDMessageFlags.Success,
+				"Термин и его определение скопированы в буфер обмена", 1500);
+			}
+
 		#endregion
 
 		#region Руководства пользователя
