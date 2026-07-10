@@ -1052,17 +1052,19 @@ namespace RD_AAOW
 				await RDInterface.XPUNLoop ();
 
 			// Политика
-			if (RDGenerics.TipsState != 0)
-				return;
-
 			await RDInterface.PolicyLoop ();
 
+			if (RDGenerics.TipsState != 0)
+				return;
+			
 			// Только после принятия
 			await RDInterface.ShowMessage ("Вас приветствует " + ProgramDescription.AssemblyMainName +
-				"HC – " + ProgramDescription.AssemblyDescription + RDLocale.RNRN +
+				" – " + ProgramDescription.AssemblyDescription + RDLocale.RNRN +
 				"На этой странице находится перечень функций приложения, который позволяет перейти " +
 				"к нужному разделу. Вернуться сюда можно с помощью кнопки «Назад»",
 				RDLocale.GetDefaultText (RDLDefaultTexts.Button_OK));
+
+			RDGenerics.TipsState = 0x0001;
 			}
 
 		// Отправка значения кнопки в буфер
