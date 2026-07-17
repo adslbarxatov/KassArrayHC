@@ -69,7 +69,7 @@ namespace RD_AAOW
 			cableDescriptionText,
 			fnLifeLabel, fnLifeModelLabel, fnLifeGenericTaxLabel, fnLifeGoodsLabel,
 			rnmKKTTypeLabel, rnmINNCheckLabel, rnmRNMCheckLabel, lowLevelCommandDescr,
-			dictionaryDescriptionField, /*dictionaryLabelField,*/
+			dictionaryDescriptionField,
 			tlvDescriptionLabel, tlvTypeLabel, tlvValuesLabel, tlvObligationLabel,
 			barcodeDescriptionLabel, ofdDisabledLabel, convNumberResultField, convCodeResultField,
 			fontSizeField, ofdDNSNameLabel, ofdDNSNameMLabel, tlvValuesHeader;
@@ -122,6 +122,9 @@ namespace RD_AAOW
 		// Список вариантов обработки ссылки на ФФД
 		private List<string> ffdBaseVariants = [];
 
+		// Флаги запуска приложения
+		private RDAppStartupFlags flags;
+
 		#endregion
 
 		#region Запуск и настройка
@@ -145,7 +148,7 @@ namespace RD_AAOW
 		private Page AppShell ()
 			{
 			Page mainPage = new MasterPage ();
-			RDAppStartupFlags flags = RDGenerics.GetAppStartupFlags (RDAppStartupFlags.DisableXPUN);
+			flags = RDGenerics.GetAppStartupFlags (RDAppStartupFlags.DisableXPUN | RDAppStartupFlags.CanWriteFiles);
 
 			kb = new KnowledgeBase ();
 
@@ -782,9 +785,6 @@ namespace RD_AAOW
 				NextButton, uiColors[tdcPage][cField], DictionaryFind_Clicked);
 			RDInterface.ApplyButtonSettings (uiPages[tdcPage], "DictionaryFindBufferButton",
 				BufferButton, uiColors[tdcPage][cField], DictionaryFind_Clicked);
-
-			/*RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescrLabel",
-				"Описание:", RDLabelTypes.HeaderLeft);*/
 
 			dictionaryDescriptionField = RDInterface.ApplyLabelSettings (uiPages[tdcPage], "DictionaryDescr",
 				"", RDLabelTypes.Field, uiColors[tdcPage][cBack]);
@@ -1829,10 +1829,22 @@ namespace RD_AAOW
 		// Печать руководства пользователя
 		private async void PrintManual_Clicked (object sender, EventArgs e)
 			{
+			// Контроль
+			if (!flags.HasFlag (RDAppStartupFlags.CanWriteFiles))
+				{
+				if (await RDInterface.ShowMessage (
+					RDLocale.GetDefaultText (RDLDefaultTexts.Message_ReadWritePermission) + "." +
+					RDLocale.RNRN + RDLocale.GetDefaultText (RDLDefaultTexts.Message_GoToPermissions),
+					RDLocale.GetDefaultText (RDLDefaultTexts.Button_Yes),
+					RDLocale.GetDefaultText (RDLDefaultTexts.Button_No)))
+					RDInterface.CallAppSettings ();
+				return;
+				}
+
 			// Выбор варианта (если доступно)
 			int res = 0;
 
-			if (AppSettings.EnableExtendedMode)  // Уровень 2
+			if (AppSettings.EnableExtendedMode)	// Уровень 2
 				{
 				if (userGuideVariants.Count < 1)
 					userGuideVariants = ["Для кассира", "Для сервис-инженера"];
@@ -1844,12 +1856,12 @@ namespace RD_AAOW
 				}
 
 			// Печать
-			UserGuidesFlags flags = UserManualFlags;
+			UserGuidesFlags ugFlags = UserManualFlags;
 			if (res == 0)
-				flags |= UserGuidesFlags.GuideForCashier;
+				ugFlags |= UserGuidesFlags.GuideForCashier;
 
 			string text = KKTSupport.BuildUserGuide (kb.UserGuides, AppSettings.KKTForManuals,
-				AppSettings.UserGuidesSectionsState, flags);
+				AppSettings.UserGuidesSectionsState, ugFlags);
 			KKTSupport.PrintManual (text, (uint)((res == 0) ? 1 : 2));
 			}
 
