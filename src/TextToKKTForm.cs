@@ -320,14 +320,17 @@ namespace RD_AAOW
 			ni.ContextMenuStrip = new ContextMenuStrip ();
 			ni.ContextMenuStrip.ShowImageMargin = false;
 
-			ni.ContextMenuStrip.Items.Add ("Работа с ФН", null, CallFSReader);
-			ni.ContextMenuStrip.Items.Add ("Заявления для ФНС", null, CallTemplateBuilder);
-			ni.ContextMenuStrip.Items.Add ("Сроки действия ФН", null, CallExpirationController);
-			ni.ContextMenuStrip.Items.Add ("Обработка данных ОФД", null, CallDataAnalyzer);
+			if (!RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode)
+				{
+				ni.ContextMenuStrip.Items.Add ("Работа с ФН", null, CallFSReader);
+				ni.ContextMenuStrip.Items.Add ("Заявления для ФНС", null, CallTemplateBuilder);
+				ni.ContextMenuStrip.Items.Add ("Сроки действия ФН", null, CallExpirationController);
+				ni.ContextMenuStrip.Items.Add ("Обработка данных ОФД", null, CallDataAnalyzer);
+				}
 
-			bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
+			/*bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
 			for (int i = 0; i < ewh.Length; i++)
-				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;
+				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;*/
 
 			ni.ContextMenuStrip.Items.Add (RDLocale.GetDefaultText (RDLDefaultTexts.Button_Exit), null,
 				CloseService);
@@ -538,7 +541,7 @@ namespace RD_AAOW
 				return;
 
 			// Нормальный запуск модуля работы с ФН
-			string exe = RDGenerics.AppStartupPath + proc + ".exe";
+			string exe = RDGenerics.StartupPath + proc + ".exe";
 			if (!RDGenerics.CheckLibrariesExistence (exe, true))
 				return;
 
@@ -1300,7 +1303,7 @@ namespace RD_AAOW
 
 			try
 				{
-				b2.Save (RDGenerics.AppStartupPath + KassArrayDB::RD_AAOW.KKTSupport.ManualLogoFileName,
+				b2.Save (KassArrayDB::RD_AAOW.KKTSupport.ManualLogoFilePath,
 					System.Drawing.Imaging.ImageFormat.Png);
 				}
 			catch
@@ -1308,7 +1311,7 @@ namespace RD_AAOW
 				TMSet (false);
 				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
 					string.Format (RDLocale.GetDefaultText (RDLDefaultTexts.Message_SaveFailure_Fmt),
-					KassArrayDB::RD_AAOW.KKTSupport.ManualLogoFileName));
+					Path.GetFileNameWithoutExtension (KassArrayDB::RD_AAOW.KKTSupport.ManualLogoFilePath)));
 				TMSet (true);
 
 				b2.Dispose ();
