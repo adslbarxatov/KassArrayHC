@@ -207,7 +207,7 @@ namespace RD_AAOW
 
 			TopFlag.Checked = AppSettings.TopMost;
 			FNReader.Visible = FNFromFNReader.Visible = OFDFromFNReader.Visible =
-				RNMFromFNReader.Visible = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode; // Уровень 2
+				RNMFromFNReader.Visible = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;	// Уровень 2
 
 			try
 				{
@@ -327,10 +327,6 @@ namespace RD_AAOW
 				ni.ContextMenuStrip.Items.Add ("Сроки действия ФН", null, CallExpirationController);
 				ni.ContextMenuStrip.Items.Add ("Обработка данных ОФД", null, CallDataAnalyzer);
 				}
-
-			/*bool enableCallMenu = !RDGenerics.StartedFromMSStore && AppSettings.EnableExtendedMode;
-			for (int i = 0; i < ewh.Length; i++)
-				ni.ContextMenuStrip.Items[i].Enabled = enableCallMenu;*/
 
 			ni.ContextMenuStrip.Items.Add (RDLocale.GetDefaultText (RDLDefaultTexts.Button_Exit), null,
 				CloseService);
@@ -557,15 +553,15 @@ namespace RD_AAOW
 		// Получение данных от FNReader
 		private void GetFromFNReader_Click (object sender, EventArgs e)
 			{
-			// Контроль
-			string status = "";
+			// Запрос
+			/*string status = "";
 			try
 				{
 				status = File.ReadAllText (KassArrayDB::RD_AAOW.KKTSupport.CreateStatusFileName (null),
 					RDGenerics.GetEncoding (RDEncodings.UTF8));
 				}
-			catch { }
-
+			catch { }*/
+			/*string status = KassArrayDB::RD_AAOW.KKTSupport.ReadStatusFile ();
 			if (string.IsNullOrWhiteSpace (status))
 				{
 				TMSet (false);
@@ -574,7 +570,7 @@ namespace RD_AAOW
 				TMSet (true);
 
 				return;
-				}
+				}*/
 
 			// Разбор
 			string buttonName = ((Button)sender).Name;
