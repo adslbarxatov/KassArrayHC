@@ -64,10 +64,6 @@
 			<Button x:Name="OFDNalogSite" HorizontalOptions="Center" />
 			<Label />
 
-			<Label x:Name="CDNSiteLabel" />
-			<Button x:Name="CDNSite" HorizontalOptions="Center" />
-			<Label />
-
 		</StackLayout>
 	</ScrollView>
 </ContentPage>

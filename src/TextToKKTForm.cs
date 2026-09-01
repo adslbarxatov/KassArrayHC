@@ -237,7 +237,7 @@ namespace RD_AAOW
 			OFDDNSNameK.Text = KassArrayDB::RD_AAOW.OFD.OKPSite;
 			OFDIPK.Text = KassArrayDB::RD_AAOW.OFD.OKPIP;
 			OFDPortK.Text = KassArrayDB::RD_AAOW.OFD.OKPPort;
-			CDNSite.Text = KassArrayDB::RD_AAOW.OFD.CDNSite;
+			/*CDNSite.Text = KassArrayDB::RD_AAOW.OFD.CDNSite;*/
 			LoadOFDParameters ();
 
 			TermSearch_Click (LLFindNextButton, null);

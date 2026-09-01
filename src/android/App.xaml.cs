@@ -719,11 +719,11 @@ namespace RD_AAOW
 				uiColors[ofdPage][cField], Field_Clicked,
 				RDButtonFlags.BiggerFontSize | RDButtonFlags.EnableShadow);
 
-			RDInterface.ApplyLabelSettings (uiPages[ofdPage], "CDNSiteLabel",
+			/*RDInterface.ApplyLabelSettings (uiPages[ofdPage], "CDNSiteLabel",
 				"CDN-площадка ЦРПТ:", RDLabelTypes.HeaderLeft);
 			RDInterface.ApplyButtonSettings (uiPages[ofdPage], "CDNSite", OFD.CDNSite,
 				uiColors[ofdPage][cField], Field_Clicked,
-				RDButtonFlags.BiggerFontSize | RDButtonFlags.EnableShadow);
+				RDButtonFlags.BiggerFontSize | RDButtonFlags.EnableShadow);*/
 
 			RDInterface.ApplyLabelSettings (uiPages[ofdPage], "OFDHelpLabel",
 				"Нажатие кнопок копирует их подписи в буфер обмена",
