@@ -237,7 +237,7 @@ namespace RD_AAOW
 			OFDDNSNameK.Text = KassArrayDB::RD_AAOW.OFD.OKPSite;
 			OFDIPK.Text = KassArrayDB::RD_AAOW.OFD.OKPIP;
 			OFDPortK.Text = KassArrayDB::RD_AAOW.OFD.OKPPort;
-			/*CDNSite.Text = KassArrayDB::RD_AAOW.OFD.CDNSite;*/
+
 			LoadOFDParameters ();
 
 			TermSearch_Click (LLFindNextButton, null);
@@ -255,7 +255,7 @@ namespace RD_AAOW
 			UserManualFlags = (KassArrayDB::RD_AAOW.UserGuidesFlags)AppSettings.UserGuidesFlags;
 			UserManualsTipLabel.Text = KassArrayDB::RD_AAOW.UserGuides.UserManualsTip;
 
-			if (AppSettings.EnableExtendedMode) // Уровень 1
+			if (AppSettings.EnableExtendedMode)		// Уровень 1
 				OperationsListForManuals.Items.AddRange (KassArrayDB::RD_AAOW.UserGuides.OperationTypes (false));
 			else
 				OperationsListForManuals.Items.AddRange (KassArrayDB::RD_AAOW.UserGuides.OperationTypes (true));
@@ -553,25 +553,6 @@ namespace RD_AAOW
 		// Получение данных от FNReader
 		private void GetFromFNReader_Click (object sender, EventArgs e)
 			{
-			// Запрос
-			/*string status = "";
-			try
-				{
-				status = File.ReadAllText (KassArrayDB::RD_AAOW.KKTSupport.CreateStatusFileName (null),
-					RDGenerics.GetEncoding (RDEncodings.UTF8));
-				}
-			catch { }*/
-			/*string status = KassArrayDB::RD_AAOW.KKTSupport.ReadStatusFile ();
-			if (string.IsNullOrWhiteSpace (status))
-				{
-				TMSet (false);
-				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
-					"Статус ФН ещё не запрашивался или содержит не все требуемые поля", 2000);
-				TMSet (true);
-
-				return;
-				}*/
-
 			// Разбор
 			string buttonName = ((Button)sender).Name;
 
