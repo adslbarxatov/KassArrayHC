@@ -143,6 +143,40 @@ namespace RD_AAOW
 		private List<string> oblTables = [];
 		private List<string> oblParents = [];
 
+		// Подстановки
+		private static string[][] descriptionReplacements = [
+			["FLAGPR", "(печатается, только если указан)"],
+			["OBJ", "товара, услуги или иного предмета расчёта"],
+			["APPEND", "(дополнительный реквизит чека, условия применения и значение которого определяется ФНС России)"],
+			["KTFMT", "Код товара в формате"],
+			["OLDCOR", "Итоговая сумма корректировок НДС по"],
+			["TOTALS", "Итоговые количества и суммы расчётов"],
+			["EXTREQ", "Дополнительный реквизит отчёта"],
+			["EXTREP", "Дополнительные данные отчёта"],
+			["OFD", "оператора фискальных данных"],
+			["INC1", "Псевдотег, инкапсулирующий"],
+			["INC2", "в выгрузке архива ФН"],
+			["OLD2027", "[ожидается упразднение с 1 сентября 2027 года]"],
+			["OLD", "[упразднён]"],
+			["RECPRICE", "Сумма по чеку или БСО, подлежащая"],
+			["RECTOTAL", "Итоговая сумма в чеках и БСО"],
+			["NDSTOTAL", "Итоговая сумма НДС по"],
+			];
+
+		private static string[][] typeNames = [
+			["BOOL", "Целое, 1 байт (значение 0 или 1)"],
+			["UNIX", "UnixTime (целое, 4 байта)"],
+			["INNF", "Строка длиной 12 байт (дополняется пробелами справа)"],
+			["STRD", "Строка длиной 10 байт в формате ДД.ММ.ГГГГ"],
+			["SCTUS", "Структура произвольной длины"],
+			["PRICE", "Целое с фиксированной запятой (до 6 байт, 2 знака)"],
+			["UINT8", "Целое, 1 байт"],
+			["UINT32", "Целое, 4 байта"],
+			["BIT8", "Битовое поле, 1 байт"],
+			["UINT16", "Целое, 2 байта"],
+			["BIT32", "Битовое поле, 4 байта"],
+			];
+
 		/// <summary>
 		/// Конструктор. Инициализирует таблицу
 		/// </summary>
@@ -275,7 +309,7 @@ namespace RD_AAOW
 			else
 				lastValuesSet = possibleValues[links[i]];
 			if (lastValuesSet.EndsWith (RDLocale.RN))
-				lastValuesSet = lastValuesSet.Substring (0, lastValuesSet.Length - 2);
+				lastValuesSet = lastValuesSet.Substring (0, lastValuesSet.Length - RDLocale.RN.Length);
 
 #if ANDROID
 			lastObligation = "<b>Для ФФД 1.05:</b><br/><i>" +
@@ -338,8 +372,8 @@ namespace RD_AAOW
 			{
 			string res = Source;
 
-			res = res.Replace ("FLAGPR", "(печатается, только если указан)");
-			res = res.Replace ("OBJ", "товара, работы, услуги, платежа, выплаты или иного предмета расчёта");
+			/*res = res.Replace ("FLAGPR", "(печатается, только если указан)");
+			res = res.Replace ("OBJ", "товара, услуги или иного предмета расчёта");
 			res = res.Replace ("APPEND", "(дополнительный реквизит чека, условия применения и значение которого " +
 				"определяется ФНС России)");
 			res = res.Replace ("KTFMT", "Код товара в формате");
@@ -350,8 +384,10 @@ namespace RD_AAOW
 			res = res.Replace ("OFD", "оператора фискальных данных");
 			res = res.Replace ("INC1", "Псевдотег, инкапсулирующий");
 			res = res.Replace ("INC2", "в выгрузке архива ФН");
-			res = res.Replace ("OLD2027", "[ожидается упразднение с 1 марта 2027 года]");
-			res = res.Replace ("OLD", "[упразднён]");
+			res = res.Replace ("OLD2027", "[ожидается упразднение с 1 сентября 2027 года]");
+			res = res.Replace ("OLD", "[упразднён]");*/
+			for (int i = 0; i < descriptionReplacements.Length; i++)
+				res = res.Replace (descriptionReplacements[i][0], descriptionReplacements[i][1]);
 
 			return TagNumber.ToString () + " (0x" + TagNumber.ToString ("X4") + "): " + res;
 			}
@@ -361,9 +397,9 @@ namespace RD_AAOW
 			{
 			string res = Source;
 
-			// Простые замены
-			if (res == "BOOL")
-				return "Целое, 1 байт (0 или 1)";
+			// Известные стандартные типы
+			/*if (res == "BOOL")
+				return "Целое, 1 байт (значение 0 или 1)";
 			if (res == "UNIX")
 				return "UnixTime (целое, 4 байта)";
 			if (res == "INNF")
@@ -373,46 +409,54 @@ namespace RD_AAOW
 			if (res == "SCTUS")
 				return "Структура произвольной длины";
 			if (res == "PRICE")
-				return "Целое с фиксированной запятой (до 6 байт, 2 знака)";
+				return "Целое с фиксированной запятой (до 6 байт, 2 знака)";*/
+			for (int i = 0; i < typeNames.Length; i++)
+				if (res == typeNames[i][0])
+					return typeNames[i][1];
 
 			// Замены с длинами
 			if (res.StartsWith ("STRLE"))
 				{
 				res = res.Replace ("STRLE", "");
-				uint v = uint.Parse (res);
-				return "Строка длиной не более " + v.ToString () + " байт";
+				/*uint v = uint.Parse (res);
+				return "Строка длиной не более " + v.ToString () + " байт";*/
+				return "Строка длиной не более " + res + " байт";
 				}
 			if (res.StartsWith ("STREA"))
 				{
 				res = res.Replace ("STREA", "");
-				uint v = uint.Parse (res);
-				return "Строка длиной " + v.ToString () + " байт (дополняется пробелами справа)";
+				/*uint v = uint.Parse (res);
+				return "Строка длиной " + v.ToString () + " байт (дополняется пробелами справа)";*/
+				return "Строка длиной " + res + " байт (дополняется пробелами справа)";
 				}
 			if (res.StartsWith ("STRE"))
 				{
 				res = res.Replace ("STRE", "");
-				uint v = uint.Parse (res);
-				return "Строка длиной " + v.ToString () + " байт";
+				/*uint v = uint.Parse (res);
+				return "Строка длиной " + v.ToString () + " байт";*/
+				return "Строка длиной " + res + " байт";
 				}
 			if (res.StartsWith ("SCTLE"))
 				{
 				res = res.Replace ("SCTLE", "");
 				if (res != "?")
-					{
-					uint v = uint.Parse (res);
-					return "Структура длиной не более " + v.ToString () + " байт";
-					}
+					return "Структура длиной не более " + res + " байт";
+				/*{
+				uint v = uint.Parse (res);
+				return "Структура длиной не более " + v.ToString () + " байт";
+				}*/
 
 				return "Структура с неуточнённой длиной";
 				}
 			if (res.StartsWith ("ARRAY"))
 				{
 				res = res.Replace ("ARRAY", "");
-				uint v = uint.Parse (res);
-				return "Байт-массив длиной не более " + v.ToString () + " байт";
+				/*uint v = uint.Parse (res);
+				return "Байт-массив длиной не более " + v.ToString () + " байт";*/
+				return "Байт-массив длиной не более " + res + " байт";
 				}
 
-			// Подстановки
+			/*// Подстановки
 			if (res.StartsWith ("UINT8"))
 				res = res.Replace ("UINT8", "Целое, 1 байт");
 			if (res.StartsWith ("UINT32"))
@@ -422,8 +466,9 @@ namespace RD_AAOW
 			if (res.StartsWith ("UINT16"))
 				res = res.Replace ("UINT16", "Целое, 2 байта");
 			if (res.StartsWith ("BIT32"))
-				res = res.Replace ("BIT32", "Битовое поле, 4 байта");
+				res = res.Replace ("BIT32", "Битовое поле, 4 байта");*/
 
+			// Возврат типов, прописанный в файле, но не учтённых в подстановках
 			return res;
 			}
 
@@ -562,7 +607,7 @@ namespace RD_AAOW
 
 			// Завершено
 			while (res.EndsWith (RDLocale.RN))
-				res = res.Substring (0, res.Length - 2);
+				res = res.Substring (0, res.Length - RDLocale.RN.Length);
 			if (string.IsNullOrWhiteSpace (res))
 				res = "• Нет сведений об обязательности тега в данном ФФД";
 
