@@ -1,12 +1,11 @@
 ﻿using Microsoft.Maui;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-[assembly: XamlCompilation (XamlCompilationOptions.Compile)]
+/*[assembly: Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 namespace RD_AAOW
 	{
 	/// <summary>

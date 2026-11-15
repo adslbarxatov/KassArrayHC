@@ -1,12 +1,11 @@
 ﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
 
 namespace RD_AAOW
 	{
 	/// <summary>
 	/// Класс описывает страницу инструкций пользователя
 	/// </summary>
-	[XamlCompilation (XamlCompilationOptions.Compile)]
+	/*[Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 	public partial class UserManualsPage: ContentPage
 		{
 		/// <summary>

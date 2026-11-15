@@ -1,9 +1,9 @@
 ﻿using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 
-#if DEBUG
-	using Microsoft.Extensions.Logging;
-#endif
+/*if DEBUG
+using Microsoft.Extensions.Logging;
+endif*/
 
 namespace RD_AAOW
 	{
@@ -14,9 +14,9 @@ namespace RD_AAOW
 			var builder = MauiApp.CreateBuilder ();
 			builder.UseMauiApp<App> ();
 
-#if DEBUG
+			/*if DEBUG
 			builder.Logging.AddDebug ();
-#endif
+			endif*/
 
 			return builder.Build ();
 			}

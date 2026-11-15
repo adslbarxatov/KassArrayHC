@@ -372,20 +372,6 @@ namespace RD_AAOW
 			{
 			string res = Source;
 
-			/*res = res.Replace ("FLAGPR", "(печатается, только если указан)");
-			res = res.Replace ("OBJ", "товара, услуги или иного предмета расчёта");
-			res = res.Replace ("APPEND", "(дополнительный реквизит чека, условия применения и значение которого " +
-				"определяется ФНС России)");
-			res = res.Replace ("KTFMT", "Код товара в формате");
-			res = res.Replace ("OLDCOR", "Итоговая сумма корректировок НДС по");
-			res = res.Replace ("TOTALS", "Итоговые количества и суммы расчётов");
-			res = res.Replace ("EXTREQ", "Дополнительный реквизит отчёта");
-			res = res.Replace ("EXTREP", "Дополнительные данные отчёта");
-			res = res.Replace ("OFD", "оператора фискальных данных");
-			res = res.Replace ("INC1", "Псевдотег, инкапсулирующий");
-			res = res.Replace ("INC2", "в выгрузке архива ФН");
-			res = res.Replace ("OLD2027", "[ожидается упразднение с 1 сентября 2027 года]");
-			res = res.Replace ("OLD", "[упразднён]");*/
 			for (int i = 0; i < descriptionReplacements.Length; i++)
 				res = res.Replace (descriptionReplacements[i][0], descriptionReplacements[i][1]);
 
@@ -398,18 +384,6 @@ namespace RD_AAOW
 			string res = Source;
 
 			// Известные стандартные типы
-			/*if (res == "BOOL")
-				return "Целое, 1 байт (значение 0 или 1)";
-			if (res == "UNIX")
-				return "UnixTime (целое, 4 байта)";
-			if (res == "INNF")
-				return "Строка длиной 12 байт (дополняется пробелами справа)";
-			if (res == "STRD")
-				return "Строка длиной 10 байт в формате ДД.ММ.ГГГГ";
-			if (res == "SCTUS")
-				return "Структура произвольной длины";
-			if (res == "PRICE")
-				return "Целое с фиксированной запятой (до 6 байт, 2 знака)";*/
 			for (int i = 0; i < typeNames.Length; i++)
 				if (res == typeNames[i][0])
 					return typeNames[i][1];
@@ -418,22 +392,16 @@ namespace RD_AAOW
 			if (res.StartsWith ("STRLE"))
 				{
 				res = res.Replace ("STRLE", "");
-				/*uint v = uint.Parse (res);
-				return "Строка длиной не более " + v.ToString () + " байт";*/
 				return "Строка длиной не более " + res + " байт";
 				}
 			if (res.StartsWith ("STREA"))
 				{
 				res = res.Replace ("STREA", "");
-				/*uint v = uint.Parse (res);
-				return "Строка длиной " + v.ToString () + " байт (дополняется пробелами справа)";*/
 				return "Строка длиной " + res + " байт (дополняется пробелами справа)";
 				}
 			if (res.StartsWith ("STRE"))
 				{
 				res = res.Replace ("STRE", "");
-				/*uint v = uint.Parse (res);
-				return "Строка длиной " + v.ToString () + " байт";*/
 				return "Строка длиной " + res + " байт";
 				}
 			if (res.StartsWith ("SCTLE"))
@@ -441,32 +409,14 @@ namespace RD_AAOW
 				res = res.Replace ("SCTLE", "");
 				if (res != "?")
 					return "Структура длиной не более " + res + " байт";
-				/*{
-				uint v = uint.Parse (res);
-				return "Структура длиной не более " + v.ToString () + " байт";
-				}*/
 
 				return "Структура с неуточнённой длиной";
 				}
 			if (res.StartsWith ("ARRAY"))
 				{
 				res = res.Replace ("ARRAY", "");
-				/*uint v = uint.Parse (res);
-				return "Байт-массив длиной не более " + v.ToString () + " байт";*/
 				return "Байт-массив длиной не более " + res + " байт";
 				}
-
-			/*// Подстановки
-			if (res.StartsWith ("UINT8"))
-				res = res.Replace ("UINT8", "Целое, 1 байт");
-			if (res.StartsWith ("UINT32"))
-				res = res.Replace ("UINT32", "Целое, 4 байта");
-			if (res.StartsWith ("BIT8"))
-				res = res.Replace ("BIT8", "Битовое поле, 1 байт");
-			if (res.StartsWith ("UINT16"))
-				res = res.Replace ("UINT16", "Целое, 2 байта");
-			if (res.StartsWith ("BIT32"))
-				res = res.Replace ("BIT32", "Битовое поле, 4 байта");*/
 
 			// Возврат типов, прописанный в файле, но не учтённых в подстановках
 			return res;

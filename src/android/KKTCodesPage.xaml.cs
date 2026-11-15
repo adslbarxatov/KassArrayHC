@@ -1,12 +1,11 @@
 ﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
 
 namespace RD_AAOW
 	{
 	/// <summary>
 	/// Класс описывает страницу преобразования текста в коды символов ККТ
 	/// </summary>
-	[XamlCompilation (XamlCompilationOptions.Compile)]
+	/*[Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 	public partial class KKTCodesPage: ContentPage
 		{
 		/// <summary>
