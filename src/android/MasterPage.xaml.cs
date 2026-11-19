@@ -5,7 +5,6 @@ namespace RD_AAOW
 	/// <summary>
 	/// Класс описывает главный макет приложения
 	/// </summary>
-	/*[Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 	public partial class MasterPage: NavigationPage
 		{
 		/// <summary>

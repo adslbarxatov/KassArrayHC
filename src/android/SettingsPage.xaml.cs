@@ -5,7 +5,6 @@ namespace RD_AAOW
 	/// <summary>
 	/// Класс описывает страницу настроек программы
 	/// </summary>
-	/*[Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 	public partial class SettingsPage: ContentPage
 		{
 		/// <summary>

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-/*[assembly: Xaml Compilation (Xaml CompilationOptions.Compile)]*/
 namespace RD_AAOW
 	{
 	/// <summary>
